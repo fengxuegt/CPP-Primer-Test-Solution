@@ -13,7 +13,7 @@ int main(){
     string line;
     cout << "please input your string" << endl;
     getline(cin, line);
-    for (auto &c: line){
+    for (auto &c: line){ // note: &
         c = 'X';
     }
     cout << line << endl;
