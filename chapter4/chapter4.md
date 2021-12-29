@@ -133,81 +133,204 @@ ival++ && ival // right
 vec[ival++] <= vec[ival] // wrong C++未规定<=两侧的表达式的求值顺序
 ```
 
-### 练习4.20
+### 练习4.20********
 
-
+```cpp
+*iter++; // *iter, iter++
+(*iter)++; // iter指向的值++
+*iter.empty(); // 不合法，这里应该加括号
+iter->empty(); // 判断迭代器元素是否为空
+++*iter; // 不合法，string类型没有++操作
+iter++->empty(); // 判断当前迭代器元素是否为空，然后迭代器++
+```
 
 ### 练习4.21
 
-
+```cpp
+#include<iostream>
+#include<vector>
+using namespace std;
+int main()
+{
+    vector<int> vec = {1, 2, 3, 4};
+    for (auto &i : vec) {
+        if (i & 0x01) {
+            i = 2 * i;
+        }
+    }
+    return 0;
+}
+```
 
 ### 练习4.22
 
-
+```cpp
+#include<iostream>
+using namespace std;
+int main()
+{
+    for (unsigned g; cin >> g) {
+        auto result = g > 90 ? "high pass" : g < 60 ? "fail" : g < 75 ? "low pass" : "pass";
+        cout << result << endl;
+        if (g > 90) {
+            cout << "high pass" << endl;
+        } else if (g < 60) {
+            cout << "fail" << endl;
+        } else if (g < 75) {
+            cout << "low pass" << endl;
+        } else {
+            cout << "pass" << endl;
+        }
+    }
+    return 0;
+}
+// 很明显当条件分支过多时if else 更容易理解
+```
 
 ### 练习4.23
 
+```cpp
+string s = "word";
+string p1 = s + s[s.size() - 1] == 's' ? "" : "s";
+// 以上语句无法通过编译，请修改；
+string p1 = s + (s[s.size() - 1] == 's' ? "" : "s");
+```
 
+### 练习4.24********
 
-### 练习4.24
-
-
+**条件运算符的右结合律怎么理解？**
 
 ### 练习4.25
 
+如果一台机器上int占32位、char占8位，用的是latin-1字符集，其中字符‘q’的二进制形式是01110001，那么表达式~'q' << 6的值是什么？
 
+首先将char提升为int型，为00000000 00000000 00000000 01110001，然后取反，在左移6位，最后是-7296。
 
 ### 练习4.26
 
-
+略
 
 ### 练习4.27
 
-
+```cpp
+unsigned long ul1 = 3, ul2 = 7;
+ul1 & ul2; // 0011, 0111, 0011 = 3
+ul1 | ul2; // 0011, 0111, 0111 = 7
+ul1 && ul2; // true
+ul1 || ul2; // true
+```
 
 ### 练习4.28
 
+```cpp
+bool 1 byte;
+char 1 byte;
+wchar_t 4 byte;
+char16_t 2 byte;
+char32_t 4 byte;
 
+short 2 byte;
+int 4 byte;
+long 8 byte;
+long long 8 byte;
+
+float 4 byte;
+double 8 byte;
+long double 16 byte;
+```
 
 ### 练习4.29
 
+```cpp
+int x[10];
+int *p = x;
+cout << sizeof(x) / sizeof(*x) << endl; // 40 / 4 = 10;
+cout << sizeof(p) / sizeof(*p) << endl; // 1
+```
 
+### 练习4.30********
 
-### 练习4.30
-
-
+```cpp
+sizeof x + y; // sizeof(x) + y
+sizeof p->mem[i]; // sizeof(p->mem[i])
+sizeof a < b; // sizeof(a) < b
+sizeof f(); // sizeof(f())
+```
 
 ### 练习4.31
 
-
+除非必须，否则不要使用后置版本的递增和递减运算符。
 
 ### 练习4.32
 
+```cpp
+constexpr int size = 5;
+int ia[size] = {1, 2, 3, 4, 5};
+for (int *ptr = ia, ix = 0; ix != size && prt != ia + size; ++ix, ++ptr) {/*...*/}
+```
 
+上述代码用于遍历数组，ptr和ix都是起到一个计数的作用
 
-### 练习4.33
+### 练习4.33********
 
+```
+someValue ? ++x, ++y : --x, --y;
+(someValue ? ++x, ++y : --x), --y;
+```
 
+如果someValue的值为真，x和y都自增并返回y值，然后丢弃y值，y递减并返回y值。
+如果someValue的值为假，x递减并返回x值，然后丢弃x值，y递减并返回y值。
 
-### 练习4.34
+### 练习4.34********
 
+```cpp
+if (fval); // fval 转化为bool型
+dval = fval + ival; // ival先转化为float型，然后相加最后转化为double型
+dval + ival * cval; // cval先转化为int型，相乘之后转化double，再相加
+```
 
+### 练习4.35********
 
-### 练习4.35
+```cpp
+char cval;
+int ival;
+unsigned int ui;
+float fval;
+double dval;
+cval = 'a' + 3; // 'a' 转化为int，与3相加之后result转化为char
+fval = ui - ival * 1.0; // ival先转化为double，ui转化为double， result转化为float
+dval = ui * fval; // ui转化为float， 结果最后转化为double
+cval = ival + fval + dval; // ival转为float，再转化为double，再转化为char
+```
 
-
+这个题要再巩固一下unsigned和double以及float的相互转化规则。
 
 ### 练习4.36
 
+```cpp
+i *= static_cast<int>(d); // i为int，d为double，书写表达式使得执行整数类型的乘法而非浮点类型的乘法
+```
 
+### 练习4.37********
 
-### 练习4.37
+```cpp
+int i;
+double d;
+const string *ps;
+char *pc;
+void *pv;
 
-
+pv = (void*)ps; // pv = static_cast<void*>(const_cast<string*>(ps));
+i = int(*pc); // i = static_cast<int>(*pc);
+pv = &d; // pv = static_cast<void*>(&d);
+pc = (char*)pv; // pc = static_cast<char*>(pv);
+```
 
 ### 练习4.38
 
-
+```cpp
+double slope = static_cast<double>(j/i); // 将j/i的结果转化为double，并赋值给slope
+```
 
 
 
